@@ -40,8 +40,17 @@ class Cliente {
         this.carrito.push(productoEncontrado);
 
         localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
-
-        alert("Producto agregado a carrito");
+        
+        Toastify({
+            text: "Producto agregado a carrito",
+            duration: 2500,
+            gravity: "bottom", 
+            position: "right", 
+            stopOnFocus: true, 
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
     }
     
     quitarCarrito(nombreProducto)  {
@@ -105,8 +114,17 @@ class Cliente {
 
     salirSesion() {
         clienteResgistrado = null;
+        Toastify({
+            text: "Se cerró la sesion",
+            duration: 2500,
+            gravity: "bottom", 
+            position: "right", 
+            stopOnFocus: true, 
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            }
+        }).showToast();
         window.location.reload();
-        alert("Se cerró la sesion");
     }
 } 
 
@@ -165,7 +183,17 @@ function inicioSesion() {
             clienteResgistrado = new Cliente(nombre, apellido, nombreUsuario); //colocando al objeto existente en su clase 
             mostrarAcciones();
         }else{
-            alert("No se encontro usuario");
+            Toastify({
+                text: "No se encontro usuario",
+                duration: 2500,
+                gravity: "top", 
+                position: "center", 
+                stopOnFocus: true, 
+                style: {
+                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)",
+                }
+            }).showToast();
+
         }
     }
 }
@@ -213,7 +241,16 @@ function registroCliente() {
             
             mostrarAcciones();
         }else{
-            alert("Ninguno de los campos puede estar vacios");
+            Toastify({
+                text: "Ninguno de los campos puede estar vacios",
+                duration: 2500,
+                gravity: "top", 
+                position: "center", 
+                stopOnFocus: true, 
+                style: {
+                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)",
+                }
+              }).showToast();
         }
     }    
 }
