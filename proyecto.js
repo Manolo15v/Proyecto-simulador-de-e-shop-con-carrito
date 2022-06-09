@@ -116,7 +116,7 @@ class Cliente {
         clienteResgistrado = null;
         Toastify({
             text: "Se cerró la sesion",
-            duration: 2500,
+            duration: 2000,
             gravity: "bottom", 
             position: "right", 
             stopOnFocus: true, 
@@ -124,7 +124,7 @@ class Cliente {
                 background: "linear-gradient(to right, #00b09b, #96c93d)",
             }
         }).showToast();
-        window.location.reload();
+        setTimeout(window.location.reload(), 2000);
     }
 } 
 
