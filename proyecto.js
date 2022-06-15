@@ -1,29 +1,14 @@
+const obtenerProductos =  async () => {
+    const res = await fetch('/productos.json');
+    const data = await res.json();    
+    data.forEach(producto => productos.push(producto));
+}
 const productos = [];
 let clientes = [];
 let clienteResgistrado;
 //elementos html modificados
 const divMostrar = document.getElementById("mostrar");
 const navegacion = document.getElementById("nav");
-
-class Produccto {
-    constructor(nombre, precio, stock) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.stock = stock;      
-        this.disponible;
-    }
-
-    disponiblilidad(item) {
-        if (this.stock > 0) {
-            this.disponible = true;
-            productos.push(item);
-
-        }else {
-            this.disponible = false;
-            productos.push(item);
-        }
-    }
-}
 
 class Cliente {
     constructor(nombre, apellido, nombreUsuario) {
@@ -35,6 +20,7 @@ class Cliente {
 
     //metodos
     agregarCarrito(nombreProducto)  {
+        
         let productoEncontrado = productos.find(producto => producto.nombre == nombreProducto);
         productoEncontrado.cantidad = 1;
         this.carrito.push(productoEncontrado);
@@ -131,16 +117,6 @@ class Cliente {
 //codigo de prueba para que haya algo en los arrays de objetos
 let cliente1 = new Cliente("Manuel", "Velazco", "manolo15v");
 clientes.push(cliente1);
-
-let producto1 = new Produccto("jabon", 2, 35);
-let producto2 = new Produccto("pantalones", 15, 50);
-let producto3 = new Produccto("almohada", 30, 0);
-let producto4 = new Produccto("teclado", 100, 10);
-
-producto1.disponiblilidad(producto1);
-producto2.disponiblilidad(producto2);
-producto3.disponiblilidad(producto3);
-producto4.disponiblilidad(producto4);
 
 
 // Inicio del programa //
@@ -258,7 +234,8 @@ function registroCliente() {
 function mostrarAcciones() {// todas las acciones que puede hacer el cliente
     borrarNavegacion();
     borrarMostrado();
-    
+    obtenerProductos();
+
     let acciones = document.createElement("ul");
     acciones.classList.add("nav", "justify-content-center");
     acciones.innerHTML = `            
@@ -290,6 +267,7 @@ function mostrarAcciones() {// todas las acciones que puede hacer el cliente
 //mostrando los productos y selecionandolos 
 function mostrarProductos() {
     borrarMostrado();
+    
     productos.forEach(producto => {
         let contenedor = document.createElement("div");
         contenedor.classList.add("row")

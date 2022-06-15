@@ -1,0 +1,56 @@
+[
+    {
+        "nombre": "Terra Blade",
+        "precio": 50,
+        "stock": 35,
+        "disponible": true
+    },
+    {
+        "nombre": "Diamond Sword",
+        "precio": 10,
+        "stock": 50,
+        "disponible": true
+    },
+    {
+        "nombre": "Lancer Mk2, Assault Rifle",
+        "precio": 36,
+        "stock": 70,
+        "disponible": true
+    },
+    {
+        "nombre": "Master Sword",
+        "precio": 1000,
+        "stock": 0,
+        "disponible": false
+    },
+    {
+        "nombre": "Portal Gun",
+        "precio": 220,
+        "stock": 5,
+        "disponible": true
+    },
+    {
+        "nombre": "Blades of Chaos",
+        "precio": 80,
+        "stock": 0,
+        "disponible": false
+    },
+    {
+        "nombre": "BFG 9000",
+        "precio": 560,
+        "stock": 5,
+        "disponible": true
+    },
+    {
+        "nombre": "Master Ball",
+        "precio": 390,
+        "stock": 1,
+        "disponible": true
+    },
+    {
+        "nombre": "Gravity Gun",
+        "precio": 90,
+        "stock": 15,
+        "disponible": true
+    }
+]
