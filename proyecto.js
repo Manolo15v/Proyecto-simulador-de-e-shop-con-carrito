@@ -23,27 +23,27 @@ class Cliente {
     //metodos
     agregarCarrito(nombreProducto) {
         if(!this.carrito.find(producto => producto.nombre == nombreProducto)) {
-            let productoEncontrado = productos.find(producto => producto.nombre == nombreProducto);
-                    productoEncontrado.cantidad = 1;
-                    this.carrito.push(productoEncontrado);
+            const productoEncontrado = productos.find(producto => producto.nombre == nombreProducto);
+            productoEncontrado.cantidad = 1;
+            this.carrito.push(productoEncontrado);
 
-                    localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
-                    
-                    Toastify({
-                        text: "Producto agregado a carrito",
-                        duration: 2500,
-                        gravity: "bottom", 
-                        position: "right", 
-                        stopOnFocus: true, 
-                        style: {
-                            background: "linear-gradient(to right, #00b09b, #96c93d)", //alerta de que algo va bien
-                        }
-                    }).showToast();
+            localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
+            
+            Toastify({
+                text: "Producto agregado a carrito",
+                duration: 2500,
+                gravity: "top", 
+                position: "right", 
+                stopOnFocus: true, 
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)", //alerta de que algo va bien
+                }
+            }).showToast();
         }else{
             Toastify({
                 text: "Este producto ya fue agregado a carrito",
                 duration: 2500,
-                gravity: "bottom", 
+                gravity: "top", 
                 position: "right", 
                 stopOnFocus: true, 
                 style: {
@@ -54,7 +54,7 @@ class Cliente {
     }
     
     quitarCarrito(nombreProducto)  {
-        let productoEncontrado = this.carrito.indexOf(this.carrito.find(producto => producto.nombre == nombreProducto));
+        const productoEncontrado = this.carrito.indexOf(this.carrito.find(producto => producto.nombre == nombreProducto));
         this.carrito.splice(productoEncontrado , 1);
         localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
 
@@ -63,11 +63,11 @@ class Cliente {
     
     verCarrito() {
         borrarMostrado();
-        let contenedor = document.createElement("div");
+        const contenedor = document.createElement("div");
         if(this.carrito.length === 0) {
             let carritoCliente = JSON.parse(localStorage.getItem("carrito" + this.nombreUsuario));
 
-            if (carritoCliente === null) {
+            if (carritoCliente === null) {//verificacion de que el carrito del local storage no este vacio
                 noCarrito();
             }else{
                 if (carritoCliente.length > 0) {
@@ -87,7 +87,7 @@ class Cliente {
             divMostrar.appendChild(contenedor);
         }
 
-        function mostrarCarrito(productosCarrito) {
+        function mostrarCarrito(productosCarrito) {//muestra el carrito en la pagina
             productosCarrito.forEach(producto => { 
                 contenedor.classList.add("row", "mb-2");
                 let { nombre, precio, stock, cantidad } = producto;
@@ -112,19 +112,19 @@ class Cliente {
     }
     
     ajusteCantidad(cantidad, nombreProducto) {
-       let productoEncontrado = this.carrito.find(producto => producto.nombre == nombreProducto);
+       const productoEncontrado = this.carrito.find(producto => producto.nombre == nombreProducto);
        productoEncontrado.cantidad = cantidad;
        localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
        clienteResgistrado.totalCarrito();
     }
 
-    totalCarrito()  {
-        let precioMostrado = document.getElementById("precio");
-        if(precioMostrado) {
+    totalCarrito()  {//muestra el total a pagar
+        const precioMostrado = document.getElementById("precio");
+        if(precioMostrado) {//quita el precio anterior para que no se repita si se cambia la cantidad de producto
             divMostrar.removeChild(precioMostrado);
         }
 
-        let contenedor = document.createElement("div");
+        const contenedor = document.createElement("div");
         contenedor.id = "precio";
         let total = this.carrito.reduce((acumulador, element) => acumulador + element.precio * element.cantidad, 0) * 1.16;
 
@@ -139,7 +139,7 @@ class Cliente {
         Toastify({
             text: "Se cerró la sesion",
             duration: 2000,
-            gravity: "bottom", 
+            gravity: "top", 
             position: "right", 
             stopOnFocus: true, 
             style: {
@@ -261,7 +261,7 @@ function registroCliente() {
                 style: {
                     background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)", //alerta de que algo va mal
                 }
-              }).showToast();
+            }).showToast();
         }
     }    
 }
@@ -304,7 +304,7 @@ function mostrarProductos() {
     borrarMostrado();
     
     productos.forEach(producto => {
-        let contenedor = document.createElement("div");
+        const contenedor = document.createElement("div");
         contenedor.classList.add("row")
         contenedor.innerHTML = `     
         <p>Producto: ${producto.nombre}</p>
