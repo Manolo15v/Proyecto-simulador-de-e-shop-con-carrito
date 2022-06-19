@@ -1,3 +1,4 @@
+//variables globales
 const obtenerProductos =  async () => {
     const res = await fetch('/productos.json');
     const data = await res.json();    
@@ -6,6 +7,7 @@ const obtenerProductos =  async () => {
 const productos = [];
 let clientes = [];
 let clienteResgistrado;
+
 //elementos html modificados
 const divMostrar = document.getElementById("mostrar");
 const navegacion = document.getElementById("nav");
@@ -19,24 +21,36 @@ class Cliente {
     }
 
     //metodos
-    agregarCarrito(nombreProducto)  {
-        
-        let productoEncontrado = productos.find(producto => producto.nombre == nombreProducto);
-        productoEncontrado.cantidad = 1;
-        this.carrito.push(productoEncontrado);
+    agregarCarrito(nombreProducto) {
+        if(!this.carrito.find(producto => producto.nombre == nombreProducto)) {
+            let productoEncontrado = productos.find(producto => producto.nombre == nombreProducto);
+                    productoEncontrado.cantidad = 1;
+                    this.carrito.push(productoEncontrado);
 
-        localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
-        
-        Toastify({
-            text: "Producto agregado a carrito",
-            duration: 2500,
-            gravity: "bottom", 
-            position: "right", 
-            stopOnFocus: true, 
-            style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-            }
-        }).showToast();
+                    localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
+                    
+                    Toastify({
+                        text: "Producto agregado a carrito",
+                        duration: 2500,
+                        gravity: "bottom", 
+                        position: "right", 
+                        stopOnFocus: true, 
+                        style: {
+                            background: "linear-gradient(to right, #00b09b, #96c93d)", //alerta de que algo va bien
+                        }
+                    }).showToast();
+        }else{
+            Toastify({
+                text: "Este producto ya fue agregado a carrito",
+                duration: 2500,
+                gravity: "bottom", 
+                position: "right", 
+                stopOnFocus: true, 
+                style: {
+                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)", //alerta de que algo va mal
+                }
+            }).showToast();
+        }
     }
     
     quitarCarrito(nombreProducto)  {
@@ -64,33 +78,46 @@ class Cliente {
             mostrarCarrito(this.carrito);
         }
 
-
         function mostrarCarrito(productosCarrito) {
             productosCarrito.forEach(producto => { 
-                contenedor.classList.add("row", "mb-2")
+                contenedor.classList.add("row", "mb-2");
+                let { nombre, precio, stock, cantidad } = producto;
                 contenedor.innerHTML += `     
-                <p>Producto: ${producto.nombre}</p>
-                <p>Precio: ${producto.precio}$</p>                
+                <p>Producto: ${nombre}</p>
+                <p>Precio: ${precio}$</p>                
                 <div class="row mb-3">
                     <div class="col-auto">
                         <p>Cantidad deseada:</p> 
                     </div>
                     <div class="col-auto">
-                    <input type="number" class="form-control" id="" value="${producto.cantidad}">
+                    <input type="number" class="form-control" id="${nombre}" value="${cantidad}" onchange="clienteResgistrado.ajusteCantidad(document.getElementById('${nombre}').value,'${nombre}')">
                     </div>
                 </div>
-                <button class="btn btn-danger " onclick="clienteResgistrado.quitarCarrito('${producto.nombre}');">Quitar producto</button>
+                <button class="btn btn-danger " onclick="clienteResgistrado.quitarCarrito('${nombre}');">Quitar producto</button>
                 `;
         
                 divMostrar.appendChild(contenedor);
-            });
+            });            
         }
         clienteResgistrado.totalCarrito();
     }
     
+    ajusteCantidad(cantidad, nombreProducto) {
+       let productoEncontrado = this.carrito.find(producto => producto.nombre == nombreProducto);
+       productoEncontrado.cantidad = cantidad;
+       clienteResgistrado.totalCarrito();
+    }
+
     totalCarrito()  {
         let contenedor = document.createElement("div");
-        let total =this.carrito.reduce((acumulador, element) => acumulador + element.precio * element.cantidad, 0) * 1.16;
+        contenedor.id = "precio";
+        let precioMostrado = document.getElementById("precio");
+        
+        if(precioMostrado) {
+            precioMostrado.innerHTML = '';
+        }
+        
+        let total = this.carrito.reduce((acumulador, element) => acumulador + element.precio * element.cantidad, 0) * 1.16;
 
         if(total > 0) {
             contenedor.innerHTML += `<p>El total a pagar con impuestos es: ${total}$</p>`;
@@ -107,7 +134,7 @@ class Cliente {
             position: "right", 
             stopOnFocus: true, 
             style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                background: "linear-gradient(to right, #00b09b, #96c93d)", //alerta de que algo va bien
             }
         }).showToast();
         setTimeout(window.location.reload(), 2000);
@@ -166,10 +193,9 @@ function inicioSesion() {
                 position: "center", 
                 stopOnFocus: true, 
                 style: {
-                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)",
+                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)", //alerta de que algo va mal
                 }
             }).showToast();
-
         }
     }
 }
@@ -224,7 +250,7 @@ function registroCliente() {
                 position: "center", 
                 stopOnFocus: true, 
                 style: {
-                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)",
+                    background: "linear-gradient(90deg, rgba(133,4,4,1) 51%, rgba(187,196,0,1) 100%)", //alerta de que algo va mal
                 }
               }).showToast();
         }
