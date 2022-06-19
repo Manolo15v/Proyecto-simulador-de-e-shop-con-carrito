@@ -67,15 +67,24 @@ class Cliente {
         if(this.carrito.length === 0) {
             let carritoCliente = JSON.parse(localStorage.getItem("carrito" + this.nombreUsuario));
 
-            if (carritoCliente.length > 0) {
-                this.carrito = carritoCliente;
-                mostrarCarrito(this.carrito);
-            } else {
-                contenedor.innerHTML = `<p class="alert alert-danger">Tu carrito esta vacio</p>`;
-                divMostrar.appendChild(contenedor);
-            }           
+            if (carritoCliente === null) {
+                noCarrito();
+            }else{
+                if (carritoCliente.length > 0) {
+                    this.carrito = carritoCliente;
+                    mostrarCarrito(this.carrito);
+                } else {
+                    noCarrito();
+                }    
+            }
+
         }else {
             mostrarCarrito(this.carrito);
+        }
+
+        function noCarrito() {
+            contenedor.innerHTML = `<p class="alert alert-danger">Tu carrito esta vacio</p>`;
+            divMostrar.appendChild(contenedor);
         }
 
         function mostrarCarrito(productosCarrito) {
@@ -90,7 +99,7 @@ class Cliente {
                         <p>Cantidad deseada:</p> 
                     </div>
                     <div class="col-auto">
-                    <input type="number" class="form-control" id="${nombre}" value="${cantidad}" onchange="clienteResgistrado.ajusteCantidad(document.getElementById('${nombre}').value,'${nombre}')">
+                    <input type="number" class="form-control" id="${nombre}" value="${cantidad}" onchange="clienteResgistrado.ajusteCantidad(document.getElementById('${nombre}').value,'${nombre}')" min='1' max='${stock}'">
                     </div>
                 </div>
                 <button class="btn btn-danger " onclick="clienteResgistrado.quitarCarrito('${nombre}');">Quitar producto</button>
@@ -105,18 +114,18 @@ class Cliente {
     ajusteCantidad(cantidad, nombreProducto) {
        let productoEncontrado = this.carrito.find(producto => producto.nombre == nombreProducto);
        productoEncontrado.cantidad = cantidad;
+       localStorage.setItem("carrito" + this.nombreUsuario, JSON.stringify(this.carrito));
        clienteResgistrado.totalCarrito();
     }
 
     totalCarrito()  {
+        let precioMostrado = document.getElementById("precio");
+        if(precioMostrado) {
+            divMostrar.removeChild(precioMostrado);
+        }
+
         let contenedor = document.createElement("div");
         contenedor.id = "precio";
-        let precioMostrado = document.getElementById("precio");
-        
-        if(precioMostrado) {
-            precioMostrado.innerHTML = '';
-        }
-        
         let total = this.carrito.reduce((acumulador, element) => acumulador + element.precio * element.cantidad, 0) * 1.16;
 
         if(total > 0) {
@@ -137,7 +146,7 @@ class Cliente {
                 background: "linear-gradient(to right, #00b09b, #96c93d)", //alerta de que algo va bien
             }
         }).showToast();
-        setTimeout(window.location.reload(), 2000);
+        setTimeout(() => {window.location.reload()}, 5000);//espera antes de recargar la pagina y salir de sesion
     }
 } 
 
